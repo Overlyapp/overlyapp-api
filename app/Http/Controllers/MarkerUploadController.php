@@ -18,7 +18,8 @@ class MarkerUploadController extends Controller
         $data = $request->validated();
 
         $params = [
-            'marker_id' => $data['marker_id']
+            'marker_id' => $data['marker_id'],
+            'publish' => 1
         ];
 
         if(!empty($data['marker_item_id']))

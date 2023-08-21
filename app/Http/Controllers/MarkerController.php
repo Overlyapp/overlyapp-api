@@ -48,7 +48,12 @@ class MarkerController extends Controller
             'marker_id' => $data['marker_id']
         ]);
 
-        $resp = json_decode($request->body(), true);
+        $responseBody = $request->body();
+
+        Log::debug($responseBody);
+
+        $resp = json_decode($responseBody, true);
+
         return response()->json($resp, !empty($resp['c']) ? 200 : 422);
     }
 
