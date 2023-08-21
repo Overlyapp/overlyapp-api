@@ -1,10 +1,10 @@
 require('./bootstrap')
 
 import { createApp } from 'vue'
-import Welcome from './components/Welcome'
+import Marker from './components/Marker'
 
 const app = createApp({})
 
-app.component('welcome', Welcome)
+app.component('MarkerManager', Marker)
 
 app.mount('#app')

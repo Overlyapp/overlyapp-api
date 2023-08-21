@@ -52,4 +52,5 @@ class MarkerController extends Controller
         return response()->json($resp, !empty($resp['c']) ? 200 : 422);
     }
 
+
 }

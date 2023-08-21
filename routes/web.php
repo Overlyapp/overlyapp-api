@@ -23,4 +23,5 @@ Route::prefix('overly')->group(function ()
 {
     Route::any('/marker/create', 'App\Http\Controllers\MarkerController@create');
     Route::any('/marker/update', 'App\Http\Controllers\MarkerController@update');
+    Route::any('/upload/marker/video', 'App\Http\Controllers\MarkerUploadController@video');
 });
