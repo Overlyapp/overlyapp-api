@@ -19820,6 +19820,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      waitCreate: false,
+      waitPublish: false,
       defaultTitle: 'Create Marker',
       currentStep: 1,
       project_id: 462,
@@ -19841,7 +19843,8 @@ __webpack_require__.r(__webpack_exports__);
     },
     createMarker: function createMarker(resp) {
       var hasError = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-      if (!resp.data.c) {
+      if (!resp.data.c || hasError) {
+        this.waitCreate = false;
         this.errorMessage = 'Please fill all required fields!';
         return;
       }
@@ -19851,6 +19854,8 @@ __webpack_require__.r(__webpack_exports__);
     },
     createMarkerEvent: function createMarkerEvent() {
       var _this = this;
+      if (this.waitCreate) return false;
+      this.waitCreate = true;
       var formData = new FormData();
       formData.append('image', this.files.image);
       formData.append('project_id', this.project_id);
@@ -19865,10 +19870,15 @@ __webpack_require__.r(__webpack_exports__);
       var hasError = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
       if (!hasError) {
         this.currentStep = 3;
+        return;
       }
+      this.errorMessage = 'Something went wrong....';
+      this.waitPublish = false;
     },
     publishMarkerEvent: function publishMarkerEvent() {
       var _this2 = this;
+      if (this.waitPublish) return;
+      this.waitPublish = true;
       var formData = new FormData();
       formData.append('marker_id', this.marker.id);
       formData.append('video', this.files['video']);
@@ -19943,25 +19953,22 @@ var _hoisted_11 = {
 var _hoisted_12 = {
   "class": "form-group"
 };
-var _hoisted_13 = /*#__PURE__*/_withScopeId(function () {
-  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", null, "Marker image", -1 /* HOISTED */);
-});
-var _hoisted_14 = ["src"];
-var _hoisted_15 = {
+var _hoisted_13 = ["src"];
+var _hoisted_14 = {
   key: 0,
   "class": "form-group"
 };
-var _hoisted_16 = /*#__PURE__*/_withScopeId(function () {
+var _hoisted_15 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", null, "Choose marker video", -1 /* HOISTED */);
 });
-var _hoisted_17 = {
+var _hoisted_16 = {
   "class": "form-group"
 };
-var _hoisted_18 = {
+var _hoisted_17 = {
   key: 0,
   "class": "text-danger"
 };
-var _hoisted_19 = {
+var _hoisted_18 = {
   key: 2
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -19984,10 +19991,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[2] || (_cache[2] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
       return $options.createMarkerEvent && $options.createMarkerEvent.apply($options, arguments);
     }, ["prevent"]))
-  }, " Next ")])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.currentStep == 2 || $data.currentStep == 3 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [_hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
+  }, " Next ")])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.currentStep == 2 || $data.currentStep == 3 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
     src: $data.marker.image,
     "class": "marker-image"
-  }, null, 8 /* PROPS */, _hoisted_14)]), $data.currentStep == 2 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_15, [_hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  }, null, 8 /* PROPS */, _hoisted_13)]), $data.currentStep == 2 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_14, [_hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "file",
     "class": "form-control",
     onChange: _cache[3] || (_cache[3] = function ($event) {
@@ -19995,13 +20002,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     ref: "marker-image",
     name: "video"
-  }, null, 544 /* HYDRATE_EVENTS, NEED_PATCH */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [$data.errorMessage && $data.errorMessage.length > 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.errorMessage), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.currentStep == 2 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
+  }, null, 544 /* HYDRATE_EVENTS, NEED_PATCH */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [$data.errorMessage && $data.errorMessage.length > 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.errorMessage), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.currentStep == 2 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
     key: 1,
     "class": "btn btn-primary",
     onClick: _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
       return $options.publishMarkerEvent && $options.publishMarkerEvent.apply($options, arguments);
     }, ["prevent"]))
-  }, " Publish Marker ")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_19, " You can scan marker now! "))])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]);
+  }, " Publish Marker ")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_18, " You can scan marker now! "))])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]);
 }
 
 /***/ }),

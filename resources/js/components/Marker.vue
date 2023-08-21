@@ -149,7 +149,6 @@
 
             <div class="card-body py-3" v-if="currentStep == 2 || currentStep == 3">
                 <div class="form-group">
-                    <label>Marker image</label>
                     <img :src="marker.image" class="marker-image"/>
                 </div>
                 <div class="form-group" v-if="currentStep == 2">
