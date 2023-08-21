@@ -28,7 +28,8 @@ class MarkerController extends Controller
             'project_id' => $data['project_id'],
         ]);
 
-        return response()->json(json_decode($request->body()));
+        $resp = json_decode($request->body(), true);
+        return response()->json($resp, !empty($resp['c']) ? 200 : 422);
     }
 
     public function update(UpdateMarkerRequest $request)
@@ -47,7 +48,8 @@ class MarkerController extends Controller
             'marker_id' => $data['marker_id']
         ]);
 
-        return response()->json(json_decode($request->body()));
+        $resp = json_decode($request->body(), true);
+        return response()->json($resp, !empty($resp['c']) ? 200 : 422);
     }
 
 }
