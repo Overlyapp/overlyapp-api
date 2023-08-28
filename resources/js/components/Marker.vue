@@ -35,7 +35,7 @@
 
             createMarker: function(resp, hasError = false)
             {
-                if(!resp.data.c || hasError)
+                if(!resp.data || !resp.data.c || hasError)
                 {
                     this.waitCreate = false;
                     this.errorMessage = 'Please fill all required fields!';

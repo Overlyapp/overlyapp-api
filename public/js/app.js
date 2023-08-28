@@ -19843,7 +19843,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     createMarker: function createMarker(resp) {
       var hasError = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-      if (!resp.data.c || hasError) {
+      if (!resp.data || !resp.data.c || hasError) {
         this.waitCreate = false;
         this.errorMessage = 'Please fill all required fields!';
         return;
