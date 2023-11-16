@@ -8,11 +8,6 @@ use Illuminate\Support\Facades\Http;
 
 class MarkerController extends Controller
 {
-    private $paths = [
-        'create' => 'https://dev.overlyapp.com/service/marker/create.json',
-        'update' => 'https://dev.overlyapp.com/service/marker/update.json'
-    ];
-
     public function create(CreateMarkerRequest $request)
     {
         $data = $request->validated();
@@ -23,7 +18,7 @@ class MarkerController extends Controller
             'image',
             file_get_contents($data['image']->getRealPath()),
             $data['image']->getClientOriginalName()
-        )->post($this->paths['create'], [
+        )->post(config('overly.PATH_MARKER_CREATE'), [
             'name' => $data['name'],
             'project_id' => $data['project_id'],
         ]);
@@ -42,7 +37,7 @@ class MarkerController extends Controller
             'image',
             file_get_contents($data['image']->getRealPath()),
             $data['image']->getClientOriginalName()
-        )->post($this->paths['create'], [
+        )->post(config('overly.PATH_MARKER_UPDATE'), [
             'name' => $data['name'],
             'project_id' => $data['project_id'],
             'marker_id' => $data['marker_id']

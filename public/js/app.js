@@ -19826,6 +19826,7 @@ __webpack_require__.r(__webpack_exports__);
       currentStep: 1,
       project_id: 462,
       errorMessage: '',
+      alpha_type: 'circle',
       marker: {
         id: 0,
         name: '',
@@ -19882,6 +19883,7 @@ __webpack_require__.r(__webpack_exports__);
       var formData = new FormData();
       formData.append('marker_id', this.marker.id);
       formData.append('video', this.files['video']);
+      formData.append('alpha_type', this.alpha_type);
       axios.post('/overly/upload/marker/video', formData).then(function (response) {
         _this2.publishMarker(response);
       })["catch"](function (error) {
@@ -27822,7 +27824,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _helpers_spread_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./helpers/spread.js */ "./node_modules/axios/lib/helpers/spread.js");
 /* harmony import */ var _helpers_isAxiosError_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./helpers/isAxiosError.js */ "./node_modules/axios/lib/helpers/isAxiosError.js");
 /* harmony import */ var _core_AxiosHeaders_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./core/AxiosHeaders.js */ "./node_modules/axios/lib/core/AxiosHeaders.js");
-/* harmony import */ var _helpers_HttpStatusCode_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./helpers/HttpStatusCode.js */ "./node_modules/axios/lib/helpers/HttpStatusCode.js");
+/* harmony import */ var _adapters_adapters_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./adapters/adapters.js */ "./node_modules/axios/lib/adapters/adapters.js");
+/* harmony import */ var _helpers_HttpStatusCode_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./helpers/HttpStatusCode.js */ "./node_modules/axios/lib/helpers/HttpStatusCode.js");
+
 
 
 
@@ -27903,7 +27907,9 @@ axios.AxiosHeaders = _core_AxiosHeaders_js__WEBPACK_IMPORTED_MODULE_13__["defaul
 
 axios.formToJSON = thing => (0,_helpers_formDataToJSON_js__WEBPACK_IMPORTED_MODULE_14__["default"])(_utils_js__WEBPACK_IMPORTED_MODULE_2__["default"].isHTMLForm(thing) ? new FormData(thing) : thing);
 
-axios.HttpStatusCode = _helpers_HttpStatusCode_js__WEBPACK_IMPORTED_MODULE_15__["default"];
+axios.getAdapter = _adapters_adapters_js__WEBPACK_IMPORTED_MODULE_15__["default"].getAdapter;
+
+axios.HttpStatusCode = _helpers_HttpStatusCode_js__WEBPACK_IMPORTED_MODULE_16__["default"];
 
 axios.default = axios;
 
@@ -28206,15 +28212,13 @@ class Axios {
     // Set config.method
     config.method = (config.method || this.defaults.method || 'get').toLowerCase();
 
-    let contextHeaders;
-
     // Flatten headers
-    contextHeaders = headers && _utils_js__WEBPACK_IMPORTED_MODULE_3__["default"].merge(
+    let contextHeaders = headers && _utils_js__WEBPACK_IMPORTED_MODULE_3__["default"].merge(
       headers.common,
       headers[config.method]
     );
 
-    contextHeaders && _utils_js__WEBPACK_IMPORTED_MODULE_3__["default"].forEach(
+    headers && _utils_js__WEBPACK_IMPORTED_MODULE_3__["default"].forEach(
       ['delete', 'get', 'head', 'post', 'put', 'patch', 'common'],
       (method) => {
         delete headers[method];
@@ -28751,7 +28755,17 @@ class AxiosHeaders {
 
 AxiosHeaders.accessor(['Content-Type', 'Content-Length', 'Accept', 'Accept-Encoding', 'User-Agent', 'Authorization']);
 
-_utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].freezeMethods(AxiosHeaders.prototype);
+// reserved names hotfix
+_utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].reduceDescriptors(AxiosHeaders.prototype, ({value}, key) => {
+  let mapped = key[0].toUpperCase() + key.slice(1); // map `set` => `Set`
+  return {
+    get: () => value,
+    set(headerValue) {
+      this[mapped] = headerValue;
+    }
+  }
+});
+
 _utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].freezeMethods(AxiosHeaders);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AxiosHeaders);
@@ -29209,12 +29223,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils.js */ "./node_modules/axios/lib/utils.js");
-/* harmony import */ var _core_AxiosError_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../core/AxiosError.js */ "./node_modules/axios/lib/core/AxiosError.js");
+/* harmony import */ var _core_AxiosError_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../core/AxiosError.js */ "./node_modules/axios/lib/core/AxiosError.js");
 /* harmony import */ var _transitional_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./transitional.js */ "./node_modules/axios/lib/defaults/transitional.js");
-/* harmony import */ var _helpers_toFormData_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../helpers/toFormData.js */ "./node_modules/axios/lib/helpers/toFormData.js");
-/* harmony import */ var _helpers_toURLEncodedForm_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../helpers/toURLEncodedForm.js */ "./node_modules/axios/lib/helpers/toURLEncodedForm.js");
-/* harmony import */ var _platform_index_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../platform/index.js */ "./node_modules/axios/lib/platform/browser/index.js");
-/* harmony import */ var _helpers_formDataToJSON_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../helpers/formDataToJSON.js */ "./node_modules/axios/lib/helpers/formDataToJSON.js");
+/* harmony import */ var _helpers_toFormData_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../helpers/toFormData.js */ "./node_modules/axios/lib/helpers/toFormData.js");
+/* harmony import */ var _helpers_toURLEncodedForm_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../helpers/toURLEncodedForm.js */ "./node_modules/axios/lib/helpers/toURLEncodedForm.js");
+/* harmony import */ var _platform_index_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../platform/index.js */ "./node_modules/axios/lib/platform/browser/index.js");
+/* harmony import */ var _helpers_formDataToJSON_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../helpers/formDataToJSON.js */ "./node_modules/axios/lib/helpers/formDataToJSON.js");
 
 
 
@@ -29224,10 +29238,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-const DEFAULT_CONTENT_TYPE = {
-  'Content-Type': undefined
-};
 
 /**
  * It takes a string, tries to parse it, and if it fails, it returns the stringified version
@@ -29258,7 +29268,7 @@ const defaults = {
 
   transitional: _transitional_js__WEBPACK_IMPORTED_MODULE_1__["default"],
 
-  adapter: ['xhr', 'http'],
+  adapter: _platform_index_js__WEBPACK_IMPORTED_MODULE_2__["default"].isNode ? 'http' : 'xhr',
 
   transformRequest: [function transformRequest(data, headers) {
     const contentType = headers.getContentType() || '';
@@ -29275,7 +29285,7 @@ const defaults = {
       if (!hasJSONContentType) {
         return data;
       }
-      return hasJSONContentType ? JSON.stringify((0,_helpers_formDataToJSON_js__WEBPACK_IMPORTED_MODULE_2__["default"])(data)) : data;
+      return hasJSONContentType ? JSON.stringify((0,_helpers_formDataToJSON_js__WEBPACK_IMPORTED_MODULE_3__["default"])(data)) : data;
     }
 
     if (_utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].isArrayBuffer(data) ||
@@ -29298,13 +29308,13 @@ const defaults = {
 
     if (isObjectPayload) {
       if (contentType.indexOf('application/x-www-form-urlencoded') > -1) {
-        return (0,_helpers_toURLEncodedForm_js__WEBPACK_IMPORTED_MODULE_3__["default"])(data, this.formSerializer).toString();
+        return (0,_helpers_toURLEncodedForm_js__WEBPACK_IMPORTED_MODULE_4__["default"])(data, this.formSerializer).toString();
       }
 
       if ((isFileList = _utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].isFileList(data)) || contentType.indexOf('multipart/form-data') > -1) {
         const _FormData = this.env && this.env.FormData;
 
-        return (0,_helpers_toFormData_js__WEBPACK_IMPORTED_MODULE_4__["default"])(
+        return (0,_helpers_toFormData_js__WEBPACK_IMPORTED_MODULE_5__["default"])(
           isFileList ? {'files[]': data} : data,
           _FormData && new _FormData(),
           this.formSerializer
@@ -29334,7 +29344,7 @@ const defaults = {
       } catch (e) {
         if (strictJSONParsing) {
           if (e.name === 'SyntaxError') {
-            throw _core_AxiosError_js__WEBPACK_IMPORTED_MODULE_5__["default"].from(e, _core_AxiosError_js__WEBPACK_IMPORTED_MODULE_5__["default"].ERR_BAD_RESPONSE, this, null, this.response);
+            throw _core_AxiosError_js__WEBPACK_IMPORTED_MODULE_6__["default"].from(e, _core_AxiosError_js__WEBPACK_IMPORTED_MODULE_6__["default"].ERR_BAD_RESPONSE, this, null, this.response);
           }
           throw e;
         }
@@ -29357,8 +29367,8 @@ const defaults = {
   maxBodyLength: -1,
 
   env: {
-    FormData: _platform_index_js__WEBPACK_IMPORTED_MODULE_6__["default"].classes.FormData,
-    Blob: _platform_index_js__WEBPACK_IMPORTED_MODULE_6__["default"].classes.Blob
+    FormData: _platform_index_js__WEBPACK_IMPORTED_MODULE_2__["default"].classes.FormData,
+    Blob: _platform_index_js__WEBPACK_IMPORTED_MODULE_2__["default"].classes.Blob
   },
 
   validateStatus: function validateStatus(status) {
@@ -29367,17 +29377,14 @@ const defaults = {
 
   headers: {
     common: {
-      'Accept': 'application/json, text/plain, */*'
+      'Accept': 'application/json, text/plain, */*',
+      'Content-Type': undefined
     }
   }
 };
 
-_utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
+_utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].forEach(['delete', 'get', 'head', 'post', 'put', 'patch'], (method) => {
   defaults.headers[method] = {};
-});
-
-_utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
-  defaults.headers[method] = _utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].merge(DEFAULT_CONTENT_TYPE);
 });
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (defaults);
@@ -29418,7 +29425,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   VERSION: () => (/* binding */ VERSION)
 /* harmony export */ });
-const VERSION = "1.4.0";
+const VERSION = "1.5.0";
 
 /***/ }),
 
@@ -31331,8 +31338,9 @@ const reduceDescriptors = (obj, reducer) => {
   const reducedDescriptors = {};
 
   forEach(descriptors, (descriptor, name) => {
-    if (reducer(descriptor, name, obj) !== false) {
-      reducedDescriptors[name] = descriptor;
+    let ret;
+    if ((ret = reducer(descriptor, name, obj)) !== false) {
+      reducedDescriptors[name] = ret || descriptor;
     }
   });
 

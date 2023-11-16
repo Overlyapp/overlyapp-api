@@ -21,7 +21,8 @@ class MarkerUploadVideoRequest extends AppRequest
         return [
             'marker_id' => 'required|integer',
             'marker_item_id' => 'sometimes|integer',
-            'video' => 'required|mimetypes:video/mp4|max:500000'
+            'video' => 'required|mimetypes:video/mp4|max:500000',
+            'alpha_type' => 'sometimes|in:'.config('overly.ALPHA_TYPES')
         ];
     }
 }

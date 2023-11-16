@@ -9,9 +9,6 @@ use Illuminate\Support\Facades\Http;
 
 class MarkerUploadController extends Controller
 {
-    private $paths = [
-        'video' => 'https://dev.overlyapp.com/service/upload/video/marker.json'
-    ];
 
     public function video(MarkerUploadVideoRequest $request)
     {
@@ -27,13 +24,15 @@ class MarkerUploadController extends Controller
             $params['marker_item_id'] = $data['marker_item_id'];
         }
 
+        if(isset($data['alpha_type'])) $params['alpha_type'] = $data['alpha_type'];
+
         $request = Http::withHeaders([
             'ApiKey' => config('overly.SERVICE_KEY')
         ])->attach(
             'video',
             file_get_contents($data['video']->getRealPath()),
             $data['video']->getClientOriginalName()
-        )->post($this->paths['video'], $params);
+        )->post(config('overly.PATH_VIDEO_UPLOAD'), $params);
 
         $resp = json_decode($request->body(), true);
         return response()->json($resp, !empty($resp['c']) ? 200 : 422);

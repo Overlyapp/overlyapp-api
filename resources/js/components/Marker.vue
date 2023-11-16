@@ -13,6 +13,8 @@
 
                 errorMessage : '',
 
+                alpha_type : 'circle',
+
                 marker: {
                     id : 0,
                     name : '',
@@ -94,6 +96,9 @@
                 const formData = new FormData();
                 formData.append('marker_id', this.marker.id);
                 formData.append('video', this.files['video']);
+
+                formData.append('alpha_type', this.alpha_type);
+
 
                 axios.post('/overly/upload/marker/video', formData)
                     .then(response => {
